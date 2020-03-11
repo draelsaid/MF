@@ -1,0 +1,17 @@
+#!/bin/bash
+
+k=375;
+ls -1 | while read d; do
+
+ test -d "$d" || continue
+ echo $d
+ cd $d ; cd "femars"; echo "In ${PWD}"
+ 
+ for i in P00*; do
+  mv -- "$i" "${i/*/${d: 0:11}_${i: 0:8}}_${k}"
+  k=$((k+1))
+ done
+ 
+ cd ../..
+
+done
