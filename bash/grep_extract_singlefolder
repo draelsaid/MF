@@ -1,0 +1,38 @@
+#!/bin/bash
+# Adam El-Said MF 2019
+# Purpose: 
+
+# 1. Extract values of surface pressure, specific humidity, temperature, 
+# divergence, kinetic energy, vorticity from every single dated folder within 
+# an experiment 
+
+# 2. Total aforementioned variables and then put them into appropriate files by variable.
+
+# Run this INSIDE the experiment folder (for example, inside folder 6C5T)
+
+plvl=65 # pressure level desired
+exp=$(pwd | cut -d'/' -f 8)
+
+# Searches through all 'std' files, and extracts the line at pressure level 100 for them all
+find . -iname "std*" | xargs grep -inr --include \*.y --exclude \*.xy --exclude \*.x -w "$plvl" > out1
+
+awk '{print $1}' out1 | cut -d'/' -f 2 | cut -d':' -f 1 > fnames # extracts file names
+awk '{print $3}' out1                                   > vals   # extracts values 
+
+# Brings the 3 extracted columns above into one file and sorts them according to the first THEN the second column
+paste <(cat fnames) <(cat vals) | sort -k1 -k2 > out2
+
+fnms=$(sort -u fnames) # extracts the filenames uniquely
+fnms_a=( $fnms )       # turns it into an array
+
+if [[ ${#plvl} -lt 3 ]]; then
+ plvl=0${plvl};
+fi
+
+# This block extracts columns containing word mimicking the filename and puts them in a relevantly named file
+awk '/stdavd.y/' out2  > $exp.stdavd.lvl$plvl.tot
+awk '/stdavke.y/' out2 > $exp.stdavke.lvl$plvl.tot
+awk '/stdavq.y/' out2  > $exp.stdavq.lvl$plvl.tot
+awk '/stdavt.y/' out2  > $exp.stdavt.lvl$plvl.tot
+awk '/stdavv.y/' out2  > $exp.stdavv.lvl$plvl.tot
+awk '/stdevps.y/' out2 > $exp.stdevps.lvl$plvl.tot

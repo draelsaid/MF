@@ -1,0 +1,14 @@
+# Extracts text between two patterns in a text file
+#awk '/pattern1/ {p=1}; p; /pattern2/ {p=0;exit}' filename
+
+pattern1="Diagnostic"
+pattern2="End of JO-table"
+
+for f in $(ls *Date*); do
+ awk '/MINIMISATION JOB T0539 NCONF=   131 NSIM4D=     1/{flag=1;next}/End of JO/{flag=0}flag' $f | grep -E "Jo Global|ObsType  7 Total:" >> out_$f
+ head -4 out_$f | awk '{print $1, $4}'  >> obstable_$f
+
+done
+
+rm -rf *out_*
+

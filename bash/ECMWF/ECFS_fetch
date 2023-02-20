@@ -1,0 +1,26 @@
+#!/bin/bash
+
+pathd=harmonie/m18m3/festat/EDA_running/
+
+ecd
+ecd ${pathd}
+
+echo "Currently in: " 
+epwd
+
+sourcelist="filelist"
+rm -rf ${sourcelist}
+cat /dev/null >> ${sourcelist}
+
+# Build sourcelist containing all files needed for this month
+
+for i in $(els); do
+ for j in $(els ${i}/bmtx); do
+  echo "Adding: " ec:${i}/bmtx/${j}
+  echo ec:${i}/bmtx/${j} >> $sourcelist
+ done
+done
+
+echo "Retrieving files from list in ${sourcelist}" 
+ecp --parents --order=tape -n -F ${sourcelist} ./
+

@@ -1,0 +1,25 @@
+#~/bin/bash
+
+# Adam El-Said 05-2020
+# simply makes folders based on zipped filename (hence the limits)
+# then throws the zipped file in there and unzips it.
+# recursive too
+# ... yeah
+
+for f in *.tar; do
+
+#tt=${f#"${f%.*.*.*}"} # this one cuts from the front of the filename
+t=${f%.*.*.*} # this one cuts from the back
+
+mkdir $t;
+mv ${f} $t;
+cd $t
+tar -xvf ${f};
+cd ..
+
+done
+
+mkdir tars
+mv */*tar* tars
+
+echo "choo choo!"

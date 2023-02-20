@@ -1,0 +1,11 @@
+#!/bin/bash
+
+suffix=.avi
+
+for i in $(ls -1); do 
+ if [[ $i == *$suffix* ]]; then 
+  foo=${i%"$suffix"}
+  foo=${foo}.mp4
+  mv $i $foo
+ fi
+done

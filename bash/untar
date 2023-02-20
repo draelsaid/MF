@@ -1,0 +1,35 @@
+#!/bin/bash
+# Adam El-Said 2019
+# Purpose: Descend into every subfolder, for all experiments and unzip (tar) every file it finds.
+  
+#find . -name "*.tar" | while read filename; do unzip -o -d "`dirname "$filename"`" "$filename"; done;
+
+ls -a
+
+shopt -s dotglob
+shopt -s nullglob
+
+exp_list=(*/)
+echo "There are ${#exp_list[@]} principal folders"
+
+for exp in "${exp_list[@]}"
+do 
+ cd "$exp"
+ dir_list=(*/)
+ 
+ echo "There are ${#dir_list[@]} directories to visit inside folder: $exp"
+
+ m=0
+ for i in "${dir_list[@]}"; do
+  m=$((m+1))
+  cd "$i"
+#  cd "stat"
+
+  find . -iname "*.tar*" | while read filename; do tar -xf "$filename"; done;
+  echo "${i%?}/stat/$filename has just been untar'ed. $m / ${#dir_list[@]}"
+  cd ../../
+ done
+#cd ../
+done
+
+echo "I think I'm done"

@@ -1,0 +1,51 @@
+#!/bin/bash
+# Adam El-Said MF 2019
+# For HARMONIE-CERRA (LAM model at 5.5km with 106 model levels)
+# Purpose: 
+
+# 1. Extract values of surface pressure, specific humidity, temperature, 
+# divergence, kinetic energy, vorticity from every single dated folder within 
+# an experiment 
+
+# 2. Total aforementioned variables and then put them into appropriate files by variable.
+
+# Run this INSIDE the experiment folder where B statistics are kept (for example, inside folder 6C5T)
+
+#plvl=80 # Pressure level desired
+#exp=$(pwd | cut -d'/' -f 5)
+
+echo "Please enter exp name"
+read exp
+echo "Experiment name set as: $exp"
+
+echo "Enter pressure level"
+read plvl
+echo "Pressure level set to: $plvl"
+
+# Searches through all 'std' files and extracts all lines at model level 100 
+#grep -inr --include "std*" -w "$plvl" > out1 
+find . -iname "std*" | xargs grep -inr --include \*.y --exclude \*.xy --exclude \*.x -w "$plvl" > out1
+
+# Extraction
+awk '{print $1}' out1 | cut -d'/' -f 2 | sed 's/[^0-9]*//g' > dates
+awk '{print $1}' out1 | cut -d'/' -f 3 | cut -d':' -f 1 > fnames 
+awk '{print $3}' out1                                   > vals                        # values 
+
+# Brings the 3 extracted columns above into one file and sorts them according to the first THEN the second column
+paste <(cat fnames) <(cat dates) <(cat vals) | sort -k1 -k2 > out2
+
+fnms=$(sort -u fnames) # extracts the filenames uniquely
+fnms_a=( $fnms )       # turns it into an array
+
+# This block extracts columns containing word mimicking the filename and puts them in a relevantly named file
+if [[ ${#plvl} -lt 3 ]]; then 
+ plvl=0${plvl}; 
+fi
+
+awk '/stdavd.y/' out2 | awk '{print $2 ", " $3}' > $exp.stdavd.lvl$plvl.tot
+awk '/stdavke.y/' out2 | awk '{print $2 ", " $3}' > $exp.stdavke.lvl$plvl.tot
+awk '/stdavq.y/' out2 | awk '{print $2 ", " $3}' > $exp.stdavq.lvl$plvl.tot
+awk '/stdavt.y/' out2 | awk '{print $2 ", " $3}' > $exp.stdavt.lvl$plvl.tot
+awk '/stdavv.y/' out2 | awk '{print $2 ", " $3}' > $exp.stdavv.lvl$plvl.tot
+awk '/stdevps.y/' out2 | awk '{print $2 ", " $3}' > $exp.stdevps.lvl$plvl.tot
+

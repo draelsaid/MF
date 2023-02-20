@@ -1,0 +1,17 @@
+#!/bin/bash
+
+k=1;
+ls -1 | while read d; do
+
+ test -d "$d" || continue
+ echo $d
+ cd $d ; cd "femars"; echo "In ${PWD}"
+ 
+ for i in 2017*; do
+  mv -- "$i" "${i/*/${i: 0:-4}_${k}}"
+  k=$((k+1))
+ done
+ 
+ cd ../..
+
+done

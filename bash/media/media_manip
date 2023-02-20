@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for i in $(ls -1): 
+do
+ lbl=$(ffprobe $i -show_entries format_tags=title -of compact=p=0:nk=1 -v 0);
+ lbl2="${lbl// /_}"
+ cp $i $lbl2
+ echo "name changed from: $i to $lbl"
+done
+

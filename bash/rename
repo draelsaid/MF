@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#date="2018030103-2018040203"
+#date="2018060103-2018070103"
+#date="Hiver18"
+#date="Ete18"
+#date="Autumn18"
+date="Spring18"
+
+mv stat.stdavke.lvl100.totsigmab.png ${date}.stdavke.lvl100.totsigmab.png
+mv stat.stdavq.lvl100.totsigmab.png ${date}.stdavq.lvl100.totsigmab.png
+mv stat.stdavt.lvl100.totsigmab.png ${date}.stdavt.lvl100.totsigmab.png
+mv stat.stdavv.lvl100.totsigmab.png ${date}.stdavv.lvl100.totsigmab.png
+mv stat.stdevps.lvl100.totsigmab.png ${date}stdevps.lvl100.totsigmab.png
+mv stat.stdavd.lvl100.totsigmab.png ${date}.stdavd.lvl100.totsigmab.png
+

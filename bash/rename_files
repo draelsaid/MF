@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Recursive rename FOLDERS ONLY
+for f in $(ls -p | grep -v / | ls *PRECISE*); do
+ mv $f "G29G."${f: 8}
+done
+

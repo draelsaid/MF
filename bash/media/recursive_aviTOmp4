@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for i in $(ls -1 *avi* *mkv*); do
+ ffmpeg -i "$i" "$i.mp4"
+done

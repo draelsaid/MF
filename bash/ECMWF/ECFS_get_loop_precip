@@ -1,0 +1,15 @@
+#!/bin/bash
+
+yyyy=2003
+mm=03
+exp=precise_s5050
+
+for dd in 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do
+ for hh in 00 12; do
+  for hhhh in 0006 0018 0030; do
+   echo "Fetching ec:/smb/harmonie/$exp/$yyyy/$mm/$dd/$hh/PFHARMPRECISE+$hhhh"   
+   ecaccess-file-get ec:/smb/harmonie/$exp/$yyyy/$mm/$dd/$hh/PFHARMPRECISE+$hhhh PFHARMPRECISE_$yyyy$mm$dd$hh+$hhhh
+  done
+ done
+done 
+

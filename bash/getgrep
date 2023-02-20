@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Adam El-Said 2020
+
+# Purpose: extract keyword from large log file and cut it down in order to plot the output
+# run with './getgrep -w "WORD"' where "WORD" is what you want to find
+
+# Take -w (word) and -f (target file) as arguments
+while getopts "w:f" option
+ do
+  case "${option}" in
+   w) WORD=${OPTARG};;
+   f) FILE=${OPTARG};;
+  esac
+done
+
+grep -nrw "${WORD}" ${FILE} > GREPGRAD2
+cut -c100- GREPGRAD2 > out_getgrep
+rm -rf GREPGRAD2
+
+
